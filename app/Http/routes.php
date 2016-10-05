@@ -31,8 +31,16 @@ Route::get('/', function(){
 	return View::make('api.docs.index');
 });
 
-/*App::missing(function()
-{
-    return Redirect::to('docs');
-});*/
+Route::group(['prefix'=>'cuenta'], function(){
+	
+		Route::get('',['uses'=>'CuentaController@allCuenta']);
 
+		Route::get('{id}',['uses'=>'CuentaController@getCuenta']);
+
+		Route::post('',['uses'=>'CuentaController@saveCuenta']);
+
+		Route::put('{id}',['uses'=>'CuentaController@updateCuenta']);
+
+		Route::delete('{id}',['uses'=>'CuentaController@deleteCuenta']);
+
+});

@@ -16,13 +16,10 @@ class Cuenta extends Entity{
 
    
     //relaciones
-    public function VehiculoChofer()
+    public function Rol()
     {
-        return $this->belongsToMany(VehiculoChofer::getClass());
+        return $this->belongsTo(Rol::getClass());
     }
 
-    public function getFullNameChoferAttribute()
-    {
-        return $this->apellido .', '. $this->nombre;
-    }
+   
 }

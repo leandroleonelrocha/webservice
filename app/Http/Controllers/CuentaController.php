@@ -27,8 +27,16 @@ class CuentaController extends Controller
     }
     public function getCuenta($id)
     {
-    	
+
+    	$cuenta = $this->cuentaRepo->find($id);
+        if(is_null($cuenta)){
+            return false;
+        }
+        
+        return $cuenta;
+
     }
+
     public function saveCuenta()
     {
     	

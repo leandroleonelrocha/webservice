@@ -12,17 +12,19 @@ namespace App\Entities;
 class Cuenta extends Entity{
 
     protected $table = 'cuenta';
-    protected $fillable = ['contrasena', 'habilitado', 'rol_id'];
+    protected $fillable = ['password','rol_id', 'entidad_id', 'habilitado'];
+    
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 
    
-    //relaciones
-    public function VehiculoChofer()
+    public function Rol()
     {
-        return $this->belongsToMany(VehiculoChofer::getClass());
+         return $this->belongsTo(Rol::getClass());
     }
 
-    public function getFullNameChoferAttribute()
-    {
-        return $this->apellido .', '. $this->nombre;
-    }
+
 }

@@ -22,4 +22,6 @@ class Rol extends Entity{
         return $this->belongsToMany(Cuenta::getClass());
     }
 
+  
+
 }

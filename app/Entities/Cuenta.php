@@ -12,8 +12,8 @@ namespace App\Entities;
 class Cuenta extends Entity{
 
     protected $table = 'cuenta';
-    protected $fillable = ['contrasena', 'habilitado', 'rol_id'];
-
+    protected $fillable = ['password','rol_id', 'entidad_id', 'habilitado'];
+    
    
     //relaciones
     public function Rol()
@@ -22,4 +22,10 @@ class Cuenta extends Entity{
     }
 
    
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
+ 
 }

@@ -19,4 +19,18 @@ class CuentaRepo extends BaseRepo
         return new Cuenta();
     }
 
+    public function findUser($user,$password){
+    	return Cuenta::where('id',$user)->where('password',$password)->get();
+    }
+
+	function generarCodigo(){
+		$patron = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+		$codigo = '';
+		for($i=0;$i<12;$i++) {
+			// Devuelve parte de una cadena
+			$codigo .= substr($patron,rand(1,62),1);
+		}
+		return $codigo;
+	}
+
 }

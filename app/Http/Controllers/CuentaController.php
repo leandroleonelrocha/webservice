@@ -23,16 +23,11 @@ class CuentaController extends Controller
     public function allCuenta()
     {
         $cuentas = $this->cuentaRepo->all();
-        
         return Response::json($cuentas,200);
-          
-
     }
-
 
     public function getCuenta($id)
     {
-
     	$cuenta = $this->cuentaRepo->find($id);
         $resultado['results'] = [];
         if(is_null($cuenta)){
@@ -41,10 +36,18 @@ class CuentaController extends Controller
         $resultado['results'] = $cuenta;
         $resultado['results']['rol'] = $cuenta->Rol;
         return response()->json($resultado, 200);
-        
-    
+    }
 
+    public function getCuentaLogin($usuario, $password){
+        $cuenta = $this->cuentaRepo->findUser($usuario, $password));
+        return response()->json($cuenta, 200);
+    }
 
+    public function createCuenta($usuario,$entidad,$rol){
+        $password = $this->cuentaRepo->generarCodigo();
+        $cuenta = array('usuario' => $usuario, 'password' => $password, 'rol_id' => $rol, 'entidad_id' => $entidad);
+        $this->cuentaRepo->create($cuenta);
+        return response()->json($password, 400);
     }
 
     public function saveCuenta()
@@ -56,8 +59,6 @@ class CuentaController extends Controller
         }
             return Response::json($cuenta,200);
     }
-
-
   
     public function updateCuenta(Request $request, $id)
     {

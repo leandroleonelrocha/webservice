@@ -12,7 +12,7 @@ namespace App\Entities;
 class Cuenta extends Entity{
 
     protected $table = 'cuenta';
-    protected $fillable = ['password','rol_id', 'entidad_id', 'habilitado'];
+    protected $fillable = ['usuario','password','rol_id', 'entidad_id', 'habilitado'];
     
    
     //relaciones

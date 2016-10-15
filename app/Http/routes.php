@@ -37,6 +37,10 @@ Route::group(['prefix'=>'cuenta'], function(){
 
 		Route::get('{id}',['uses'=>'CuentaController@getCuenta']);
 
+		Route::get('cuentaLogin/{usuario}/{password}',['uses'=>'CuentaController@getCuentaLogin']);
+
+		Route::get('cuentaCreate/{usuario}/{entidad}/{rol}',['uses'=>'CuentaController@createCuenta']);
+
 		Route::post('',['uses'=>'CuentaController@saveCuenta']);
 
 		Route::put('{id}',['uses'=>'CuentaController@updateCuenta']);

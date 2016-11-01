@@ -18,6 +18,31 @@ class CuentaController extends Controller
        $this->cuentaRepo = $cuentaRepo;
     }
 
+    public function postLogin(Request $request){
+        return redirect()->route('administracion.cuentas_lista');
+    }
+
+    public function cuentas_lista(){
+        $cuentas = $this->cuentaRepo->allCuentas();
+        return view('administracion.cuentas.lista', compact('cuentas'));
+    }
+
+    public function habilitar($id){
+        $cuenta = $this->cuentaRepo->find($id);
+        if($cuenta->habilitado == 1){
+            $cuenta->habilitado = 0;
+            $resultado = '<i class="btn btn-red fa fa-thumbs-o-down" title="Inhabilitado"></i>';
+        }
+        else
+        {
+            $cuenta->habilitado = 1;
+            $resultado = '<i class="btn btn-green fa fa-thumbs-o-up" title="Habilitado"></i>';
+        }
+
+        if ($cuenta->save())
+            return Response::json($resultado,200);
+    }
+
     public function allCuenta()
     {
         $cuentas = $this->cuentaRepo->all();
@@ -37,8 +62,10 @@ class CuentaController extends Controller
     }
 
     public function getCuentaLogin($usuario, $password){
+
         $cuenta = $this->cuentaRepo->findUser($usuario);
-        $estado   = Hash::check($password,$cuenta->password);
+        $estado   = Hash::check($password, $cuenta->password);
+
         if ($estado == TRUE) {
             return response()->json($cuenta, 200);
         }
@@ -97,6 +124,20 @@ class CuentaController extends Controller
         }
         else{
             $password=NULL;
+    }
+
+    public function actualizar($mail, $password)
+    {
+        $cuenta                 = $this->cuentaRepo->findUser($mail);
+        if ($cuenta == NULL) {
+            return false;
+        }
+        else{
+            $pass               = Hash::make($password);
+            $cuenta->password   = $pass;
+            $cuenta->save();
+            return true;
+
         }
 
         // $cuenta = $this->cuentaRepo->find($id);

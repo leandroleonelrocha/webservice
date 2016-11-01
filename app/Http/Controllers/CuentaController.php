@@ -1,13 +1,11 @@
 <?php
 
-
-
 namespace App\Http\Controllers;
 
 use App\Http\Repositories\CuentaRepo;
 use Response;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Hash;
 
 class CuentaController extends Controller
 {
@@ -18,6 +16,31 @@ class CuentaController extends Controller
        header('Access-Control-Allow-Origin: *');
        header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
        $this->cuentaRepo = $cuentaRepo;
+    }
+
+    public function postLogin(Request $request){
+        return redirect()->route('administracion.cuentas_lista');
+    }
+
+    public function cuentas_lista(){
+        $cuentas = $this->cuentaRepo->allCuentas();
+        return view('administracion.cuentas.lista', compact('cuentas'));
+    }
+
+    public function habilitar($id){
+        $cuenta = $this->cuentaRepo->find($id);
+        if($cuenta->habilitado == 1){
+            $cuenta->habilitado = 0;
+            $resultado = '<i class="btn btn-red fa fa-thumbs-o-down" title="Inhabilitado"></i>';
+        }
+        else
+        {
+            $cuenta->habilitado = 1;
+            $resultado = '<i class="btn btn-green fa fa-thumbs-o-up" title="Habilitado"></i>';
+        }
+
+        if ($cuenta->save())
+            return Response::json($resultado,200);
     }
 
     public function allCuenta()
@@ -39,8 +62,11 @@ class CuentaController extends Controller
     }
 
     public function getCuentaLogin($usuario, $password){
-        $cuenta = $this->cuentaRepo->findUser($usuario, $password));
-        return response()->json($cuenta, 200);
+        $cuenta = $this->cuentaRepo->findUser($usuario);
+        $estado   = Hash::check($password, $cuenta->password);
+        if ($estado == TRUE) {
+            return response()->json($cuenta, 200);
+        }
     }
 
     public function createCuenta($usuario,$entidad,$rol){
@@ -60,15 +86,26 @@ class CuentaController extends Controller
             return Response::json($cuenta,200);
     }
   
-    public function updateCuenta(Request $request, $id)
+    public function actualizar($mail, $password)
     {
-        $cuenta = $this->cuentaRepo->find($id);
-        $datos = $request->all();    
-        if(is_null($cuenta)){
-            return Response::json(['response'=>"La Cuenta no pudo ser actualizada!"], 400);
+        $cuenta                 = $this->cuentaRepo->findUser($mail);
+        if ($cuenta == NULL) {
+            return false;
         }
-        $cuenta->edit($cuenta, $datos);
-        return Response::json(['response'=>"Cuenta actualizada!"], 200);
+        else{
+            $pass               = Hash::make($password);
+            $cuenta->password   = $pass;
+            $cuenta->save();
+            return true;
+        }
+
+        // $cuenta = $this->cuentaRepo->find($id);
+        // $datos = $request->all();    
+        // if(is_null($cuenta)){
+        //     return Response::json(['response'=>"La Cuenta no pudo ser actualizada!"], 400);
+        // }
+        // $cuenta->edit($cuenta, $datos);
+        // return Response::json(['response'=>"Cuenta actualizada!"], 200);
     }
 
     public function deleteCuenta($id)

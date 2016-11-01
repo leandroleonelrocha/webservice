@@ -31,6 +31,23 @@ Route::get('/', function(){
 	return View::make('api.docs.index');
 });
 
+Route::group(['prefix'=>'administracion'], function(){
+	Route::post('administracion',[
+		'as'	=> 'administracion.postLogin',
+		'uses'	=> 'CuentaController@postLogin'
+	]);
+
+	Route::get('cuentas',[
+		'as'	=> 'administracion.cuentas_lista',
+		'uses'	=> 'CuentaController@cuentas_lista'
+	]);
+
+	Route::get('cuentas_habilitar/{id}',[
+		'as'	=> 'administracion.cuentas_habilitar',
+		'uses'	=> 'CuentaController@habilitar'
+	]);
+});
+
 Route::group(['prefix'=>'cuenta'], function(){
 	
 		Route::get('',['uses'=>'CuentaController@allCuenta']);

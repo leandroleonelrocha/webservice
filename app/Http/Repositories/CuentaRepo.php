@@ -23,6 +23,10 @@ class CuentaRepo extends BaseRepo
     	return Cuenta::where('id',$user)->where('password',$password)->get();
     }
 
+    public function allCuentas(){
+    	return Cuenta::where('rol_id','!=',1)->get();
+    }
+
 	function generarCodigo(){
 		$patron = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
 		$codigo = '';

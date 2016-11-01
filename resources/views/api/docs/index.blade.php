@@ -1,44 +1,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Laravel</title>
-
+        <title>GECO</title>
         <link href="//fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-
-        <style>
-            html, body {
-                height: 100%;
-            }
-
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                display: table;
-                font-weight: 100;
-                font-family: 'Lato';
-            }
-
-            .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
-
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
-
-            .title {
-                font-size: 96px;
-            }
-        </style>
+        <link href="{{asset('css/geco-styles.css')}}" rel="stylesheet" type="text/css">
     </head>
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">WEB SERVICE</div>                
+                <div class="title">GECO</div>
+                <div>
+                    {!! Form::open(['route'=>'administracion.postLogin','method' => 'post']) !!}
+                        <div>
+                            {!! Form::text('usuario', null, array('class' => 'form-control', 'placeholder'=>'Email')) !!}
+                        </div>
+                        <div>
+                            {!! Form::password('password', array('class' => 'form-control', 'placeholder'=>'Password')) !!}
+                        </div>
+                        <button class="btn btn-green">Sign In</button>
+                    {!! Form::close() !!}
+                </div>           
             </div>
         </div>
     </body>

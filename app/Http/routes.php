@@ -43,7 +43,9 @@ Route::group(['prefix'=>'cuenta'], function(){
 
 		Route::post('',['uses'=>'CuentaController@saveCuenta']);
 
-		Route::put('{id}',['uses'=>'CuentaController@updateCuenta']);
+		Route::get('actualizarCuenta/{mail}/{password}/{passwordActual}',['uses'=>'CuentaController@actualizar']);
+
+		Route::get('restaurarCuenta/{mail}',['uses'=>'CuentaController@restaurar']);
 
 		Route::delete('{id}',['uses'=>'CuentaController@deleteCuenta']);
 

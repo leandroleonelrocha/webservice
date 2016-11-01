@@ -8,8 +8,9 @@
 
 namespace App\Http\Repositories;
 use App\Entities\Cuenta;
-
-
+use Hash;
+use Response;
+use Illuminate\Http\Request;
 
 class CuentaRepo extends BaseRepo
 {
@@ -19,8 +20,8 @@ class CuentaRepo extends BaseRepo
         return new Cuenta();
     }
 
-    public function findUser($user,$password){
-    	return Cuenta::where('id',$user)->where('password',$password)->get();
+    public function findUser($user){
+    	return $this->model->where('usuario',$user)->first();
     }
 
 	function generarCodigo(){

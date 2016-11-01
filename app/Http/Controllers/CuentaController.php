@@ -1,13 +1,11 @@
 <?php
 
-
-
 namespace App\Http\Controllers;
 
 use App\Http\Repositories\CuentaRepo;
 use Response;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Hash;
 
 class CuentaController extends Controller
 {
@@ -39,8 +37,11 @@ class CuentaController extends Controller
     }
 
     public function getCuentaLogin($usuario, $password){
-        $cuenta = $this->cuentaRepo->findUser($usuario, $password));
-        return response()->json($cuenta, 200);
+        $cuenta = $this->cuentaRepo->findUser($usuario);
+        $estado   = Hash::check($password,$cuenta->password);
+        if ($estado == TRUE) {
+            return response()->json($cuenta, 200);
+        }
     }
 
     public function createCuenta($usuario,$entidad,$rol){
@@ -60,15 +61,51 @@ class CuentaController extends Controller
             return Response::json($cuenta,200);
     }
   
-    public function updateCuenta(Request $request, $id)
+    public function actualizar($mail, $password,$passwordActual)
     {
-        $cuenta = $this->cuentaRepo->find($id);
-        $datos = $request->all();    
-        if(is_null($cuenta)){
-            return Response::json(['response'=>"La Cuenta no pudo ser actualizada!"], 400);
+        $cuenta                 = $this->cuentaRepo->findUser($mail);
+        $estado   = Hash::check($passwordActual,$cuenta->password);
+
+
+        if ($estado == true) {
+
+            $cuenta->password   = $password;
+            $cuenta->save();
+            return response()->json($cuenta, 200);
+          
         }
-        $cuenta->edit($cuenta, $datos);
-        return Response::json(['response'=>"Cuenta actualizada!"], 200);
+
+        // if ($cuenta == NULL) {
+            // return Response::json(['response'=>"La contraseña no ha podido ser modificada"], 200);
+        // }
+        // else{
+
+
+            // return Response::json(['response'=>"La contraseña a sido modificada con éxito"], 200);
+        // }
+    }
+    public function restaurar($mail)
+    {
+        $cuenta = $this->cuentaRepo->findUser($mail);
+
+        if ($cuenta){
+
+            $password = $this->cuentaRepo->generarCodigo();
+            $cuenta->password   = $password;
+            $cuenta->save(); 
+            return response()->json($password, 400);
+        }
+        else{
+            $password=NULL;
+        }
+
+        // $cuenta = $this->cuentaRepo->find($id);
+        // $datos = $request->all();    
+        // if(is_null($cuenta)){
+        //     return Response::json(['response'=>"La Cuenta no pudo ser actualizada!"], 400);
+        // }
+        // $cuenta->edit($cuenta, $datos);
+        // return Response::json(['response'=>"Cuenta actualizada!"], 200);
     }
 
     public function deleteCuenta($id)

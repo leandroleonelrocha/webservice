@@ -19,8 +19,8 @@ class CuentaRepo extends BaseRepo
         return new Cuenta();
     }
 
-    public function findUser($user,$password){
-    	return Cuenta::where('id',$user)->where('password',$password)->get();
+    public function findUser($user){
+        return $this->model->where('usuario',$user)->first();
     }
 
     public function allCuentas(){

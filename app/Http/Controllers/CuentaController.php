@@ -62,8 +62,10 @@ class CuentaController extends Controller
     }
 
     public function getCuentaLogin($usuario, $password){
+
         $cuenta = $this->cuentaRepo->findUser($usuario);
         $estado   = Hash::check($password, $cuenta->password);
+
         if ($estado == TRUE) {
             return response()->json($cuenta, 200);
         }
@@ -86,6 +88,44 @@ class CuentaController extends Controller
             return Response::json($cuenta,200);
     }
   
+    public function actualizar($mail, $password,$passwordActual)
+    {
+        $cuenta                 = $this->cuentaRepo->findUser($mail);
+        $estado   = Hash::check($passwordActual,$cuenta->password);
+
+
+        if ($estado == true) {
+
+            $cuenta->password   = $password;
+            $cuenta->save();
+            return response()->json($cuenta, 200);
+          
+        }
+
+        // if ($cuenta == NULL) {
+            // return Response::json(['response'=>"La contraseña no ha podido ser modificada"], 200);
+        // }
+        // else{
+
+
+            // return Response::json(['response'=>"La contraseña a sido modificada con éxito"], 200);
+        // }
+    }
+    public function restaurar($mail)
+    {
+        $cuenta = $this->cuentaRepo->findUser($mail);
+
+        if ($cuenta){
+
+            $password = $this->cuentaRepo->generarCodigo();
+            $cuenta->password   = $password;
+            $cuenta->save(); 
+            return response()->json($password, 400);
+        }
+        else{
+            $password=NULL;
+    }
+
     public function actualizar($mail, $password)
     {
         $cuenta                 = $this->cuentaRepo->findUser($mail);
@@ -97,6 +137,7 @@ class CuentaController extends Controller
             $cuenta->password   = $pass;
             $cuenta->save();
             return true;
+
         }
 
         // $cuenta = $this->cuentaRepo->find($id);

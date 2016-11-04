@@ -8,8 +8,9 @@
 
 namespace App\Http\Repositories;
 use App\Entities\Cuenta;
-
-
+use Hash;
+use Response;
+use Illuminate\Http\Request;
 
 class CuentaRepo extends BaseRepo
 {
@@ -20,6 +21,7 @@ class CuentaRepo extends BaseRepo
     }
 
     public function findUser($user){
+
         return $this->model->where('usuario',$user)->first();
     }
 
